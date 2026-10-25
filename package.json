@@ -1,0 +1,21 @@
+{
+  "name": "everfest-workspace",
+  "version": "1.0.0",
+  "private": true,
+  "description": "EverFest - AI Celebration & Event Planner for PromptWars Challenge 5",
+  "scripts": {
+    "install:all": "npm install && npm install --prefix server && npm install --prefix client",
+    "dev": "concurrently -n \"SERVER,CLIENT\" -c \"cyan,magenta\" \"npm run dev --prefix server\" \"npm run dev --prefix client\"",
+    "dev:server": "npm run dev --prefix server",
+    "dev:client": "npm run dev --prefix client",
+    "build": "npm run build --prefix server && npm run build --prefix client",
+    "build:server": "npm run build --prefix server",
+    "build:client": "npm run build --prefix client",
+    "lint": "npm run lint --prefix server && npm run lint --prefix client",
+    "test": "npm run test --prefix server && npm run test --prefix client",
+    "start": "npm run start --prefix server"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
