@@ -180,7 +180,7 @@ EverFest is designed for decoupled cloud deployment: the **React frontend on Ver
    NODE_ENV=production
    PORT=5000
    CLIENT_URL=https://your-everfest-frontend.vercel.app
-   GEMINI_API_KEY=AIzaSy...your_gemini_api_key_here...
+   GEMINI_API_KEY=your_gemini_api_key_here
    GEMINI_MODEL=gemini-2.5-flash
    ```
    > [!TIP]

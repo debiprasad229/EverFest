@@ -123,7 +123,8 @@ describe('AiService', () => {
 
   describe('Security & Sanitization', () => {
     it('scrubs Google API keys and secrets from log strings', () => {
-      const mockKey = 'AIzaSyA1B2C3D4E5F6G7H8I9J0K1L2M3N4O5P6Q';
+      // Dynamic concatenation to prevent false-positive GitHub Secret Scanner alerts on mock test token
+      const mockKey = 'AIza' + 'Sy' + '_FAKE_TEST_KEY_FOR_UNIT_TESTING_1234';
       const rawLog = `Error connecting to Gemini endpoint with key: ${mockKey}`;
       const sanitized = sanitizeLog(rawLog);
 
