@@ -261,6 +261,7 @@ describe('AiService', () => {
         preferences: 'Acoustic guitar background, signature mocktails',
         dietaryNeeds: ['Vegetarian', 'Gluten-Free'],
         accessibilityNeeds: ['Step-Free Access'],
+        currency: 'USD',
       });
 
       // 1. Themes & Decor

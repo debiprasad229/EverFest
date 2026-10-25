@@ -487,10 +487,10 @@ export const CreativeIdeasRequestSchema = z.object({
   specialPreferences: z.string().max(1000).optional(),
   dietaryNeeds: z.array(z.string().max(100)).max(30).optional(),
   accessibilityNeeds: z.array(z.string().max(100)).max(30).optional(),
-  currency: z.string().max(10).optional().default('USD'),
+  currency: z.string().max(10).optional(),
 });
 
-export type CreativeIdeasRequestInput = z.infer<typeof CreativeIdeasRequestSchema>;
+export type CreativeIdeasRequestInput = z.input<typeof CreativeIdeasRequestSchema>;
 
 export const ThemeIdeaSchema = z.object({
   title: z.string().min(2),
