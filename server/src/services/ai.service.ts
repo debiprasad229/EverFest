@@ -234,7 +234,7 @@ export class AiService {
   private async generateWithGemini(input: EventPlanRequestInput): Promise<GeneratedAiPlan> {
     if (!this.genAI) throw new Error('Gemini client is not initialized');
 
-    const modelName = env.GEMINI_MODEL || 'gemini-2.5-flash';
+    const modelName = env.GEMINI_MODEL || 'gemini-3.8-flash';
     const model = this.genAI.getGenerativeModel({
       model: modelName,
       generationConfig: {
@@ -727,7 +727,7 @@ You must return a single valid JSON object with NO surrounding markdown backtick
   private async generateWithGeminiCreativeIdeas(input: CreativeIdeasRequestInput): Promise<CreativeIdeasResponse> {
     if (!this.genAI) throw new Error('Gemini client is not initialized');
 
-    const modelName = env.GEMINI_MODEL || 'gemini-2.5-flash';
+    const modelName = env.GEMINI_MODEL || 'gemini-3.8-flash';
     const model = this.genAI.getGenerativeModel({
       model: modelName,
       generationConfig: {

@@ -92,7 +92,7 @@ CLIENT_URL=http://localhost:5173
 # NEVER expose this key to frontend code or client bundles.
 # If omitted or invalid, EverFest seamlessly falls back to its deterministic domain planning engine.
 GEMINI_API_KEY=your_gemini_api_key_here
-GEMINI_MODEL=gemini-2.5-flash
+GEMINI_MODEL=gemini-3.8-flash
 ```
 
 > [!NOTE]
@@ -181,7 +181,7 @@ EverFest is designed for decoupled cloud deployment: the **React frontend on Ver
    PORT=5000
    CLIENT_URL=https://your-everfest-frontend.vercel.app
    GEMINI_API_KEY=your_gemini_api_key_here
-   GEMINI_MODEL=gemini-2.5-flash
+   GEMINI_MODEL=gemini-3.8-flash
    ```
    > [!TIP]
    > `CLIENT_URL` supports multiple origins separated by commas if you have custom domains or staging environments (e.g., `https://everfest.vercel.app,https://everfest-preview.vercel.app`).
