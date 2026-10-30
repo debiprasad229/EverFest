@@ -22,7 +22,7 @@ EverFest is an AI-powered celebration and event planning platform designed to tr
 - **Timeline & Day-of Schedule**:
   - Dual-mode tracker: **Milestone Roadmap** (pre-event due dates, priorities, status checkboxes) and **Run-of-Show** (chronological staging times, locations, and lead persons)
 - **Vendor CRM Hub**:
-  - Directory categorized by role (Venue, Catering, Photography, Florist, Music/DJ, etc.)
+  - Directory categorized by service category (Venue, Catering, Photography, Florist, Music/DJ, etc.)
   - Pipeline status (`Researching` → `Contacted` → `Quoted` → `Booked` → `Completed`)
   - Direct contact links (phone, email, website) and contracted amount tracking
 - **Print & Export Engine**:
@@ -147,65 +147,58 @@ npm run dev
 
 ## 🌐 Production Deployment Guide
 
-EverFest is designed for decoupled cloud deployment: the **React frontend on Vercel** and the **Express backend on any compatible Node.js host** (e.g. Render, Railway, Fly.io, Heroku, or AWS App Runner).
+EverFest supports **100% Serverless Deployment directly on Vercel** (Recommended: frontend + serverless API deployed as a unified project with zero cold starts and no separate hosting required), or decoupled deployment with an external Node.js backend.
+
+### ⚡ Recommended: Unified Serverless on Vercel (No Cold Starts)
+
+Deploying both frontend and backend on Vercel completely eliminates Render's 50-second free-tier spin-up delay and avoids CORS configuration.
 
 ```
-┌────────────────────────────────┐         ┌────────────────────────────────┐
-│         Vercel (Client)        │  HTTPS  │    Render / Railway (Server)   │
-│   https://everfest.vercel.app  │────────▶│  https://everfest-api.com/api  │
-│    (Static Vite SPA Bundle)    │  CORS   │   (Express Node.js Service)    │
-└────────────────────────────────┘         └────────────────────────────────┘
-                                                           │
-                                                           ▼ Google AI SDK
-                                           ┌────────────────────────────────┐
-                                           │     Google Gemini AI API       │
-                                           │     (Backend-Only Key)         │
-                                           └────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│                       Vercel (Unified)                      │
+│   Frontend SPA (Vite Static CDN)    https://everfest.app/   │
+│   Backend API (Serverless Function) https://everfest.app/api│
+└──────────────────────────────┬──────────────────────────────┘
+                               │
+                               ▼ Google AI SDK
+               ┌────────────────────────────────┐
+               │     Google Gemini AI API       │
+               │     (Backend-Only Key)         │
+               └────────────────────────────────┘
 ```
 
----
-
-### Step 1: Deploy Backend (Render / Railway / Fly.io)
-
-1. **Create a New Web Service** on your chosen host (e.g. [Render](https://render.com) or [Railway](https://railway.app)).
-2. Connect your Git repository.
-3. Configure the service settings:
-   - **Root Directory**: `server`
-   - **Environment**: `Node`
-   - **Build Command**: `npm install && npm run build`
-   - **Start Command**: `npm start`
-   - **Health Check Path**: `/health` (returns HTTP 200 `{ status: "ok" }`)
-4. **Set Backend Environment Variables**:
+1. Push your repository to **GitHub** or **GitLab**.
+2. Log in to [Vercel](https://vercel.com) and click **"Add New Project"**.
+3. Import your repository:
+   - **Framework Preset**: `Vite`
+   - **Root Directory**: `./` (leave as repository root)
+   - **Build Command**: `npm run build` *(auto-detected from `vercel.json`)*
+   - **Output Directory**: `client/dist` *(auto-detected from `vercel.json`)*
+4. **Environment Variables**:
+   Under **Project Settings > Environment Variables**, add your Google Gemini key:
    ```env
-   NODE_ENV=production
-   PORT=5000
-   CLIENT_URL=https://your-everfest-frontend.vercel.app
    GEMINI_API_KEY=your_gemini_api_key_here
    GEMINI_MODEL=gemini-3.8-flash
    ```
-   > [!TIP]
-   > `CLIENT_URL` supports multiple origins separated by commas if you have custom domains or staging environments (e.g., `https://everfest.vercel.app,https://everfest-preview.vercel.app`).
-5. Deploy the backend and copy your live service URL (e.g., `https://everfest-api.onrender.com`).
+5. Click **"Deploy"**.
+   - Your frontend will be served globally at `https://your-project.vercel.app`.
+   - Your backend API is instantly live at `https://your-project.vercel.app/api` with sub-second response times and zero cold-sleep downtime.
 
 ---
 
-### Step 2: Deploy Frontend (Vercel)
+### Alternative: Decoupled Deployment (Render / Railway Backend + Vercel Frontend)
 
-1. Log in to [Vercel](https://vercel.com) and click **"Add New Project"**.
-2. Select your repository.
-3. Configure project settings:
-   - **Framework Preset**: `Vite`
-   - **Root Directory**: `client` *(or leave as root, as both `client/vercel.json` and root `vercel.json` are pre-configured)*
-   - **Build Command**: `npm run build`
-   - **Output Directory**: `dist`
-4. **Set Frontend Environment Variable**:
-   In Vercel **Project Settings > Environment Variables**:
-   ```env
-   VITE_API_URL=https://your-everfest-api.onrender.com/api/v1
-   ```
-   *(EverFest automatically handles bare domain URLs like `https://your-everfest-api.onrender.com` or explicit endpoints like `.../api` or `.../api/v1` through its built-in `resolveApiBase()` utility).*
-5. Click **"Deploy"**. Vercel will build the production bundle and deploy it to a `.vercel.app` domain.
-6. **Update Backend CORS**: Return to your backend host and update `CLIENT_URL` to match your assigned Vercel URL (e.g., `https://everfest-xyz.vercel.app`).
+If you prefer running a dedicated long-running Node.js process:
+
+1. **Deploy Backend (Render / Railway)**:
+   - Root Directory: `server`
+   - Build Command: `npm install && npm run build`
+   - Start Command: `npm start`
+   - Health Check: `/health`
+   - Environment: `PORT=5000`, `NODE_ENV=production`, `GEMINI_API_KEY=...`, `CLIENT_URL=https://your-frontend.vercel.app`
+2. **Deploy Frontend (Vercel)**:
+   - Root Directory: `client`
+   - Environment Variable: `VITE_API_URL=https://your-render-backend.onrender.com/api/v1`
 
 ---
 

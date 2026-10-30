@@ -26,8 +26,15 @@ export const createApp = () => {
       // Allow requests with no origin (like mobile apps, curl, or same-origin)
       if (!origin) return callback(null, true);
 
-      // Check if origin matches allowedOrigins
-      if (allowedOrigins.includes(origin)) {
+      // Check if origin matches allowedOrigins or any Vercel deployment domain
+      let isVercelDomain = false;
+      try {
+        isVercelDomain = /\.vercel\.app$/.test(new URL(origin).hostname);
+      } catch {
+        isVercelDomain = false;
+      }
+
+      if (allowedOrigins.includes(origin) || isVercelDomain) {
         return callback(null, true);
       }
 
@@ -69,9 +76,10 @@ export const createApp = () => {
     });
   });
 
-  // Mount API endpoints with general rate limiting: supports /api and /api/v1
+  // Mount API endpoints with general rate limiting: supports /api, /api/v1, and direct serverless invocation
   app.use('/api', generalApiLimiter, apiRouter);
   app.use('/api/v1', generalApiLimiter, apiRouter);
+  app.use('/', generalApiLimiter, apiRouter);
 
   // 404 handler for unknown routes
   app.use('*', (req, res, next) => {

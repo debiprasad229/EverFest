@@ -127,7 +127,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 {/* Auxiliary SaaS Controls with Accessible Notifications */}
                 <button
                   type="button"
-                  onClick={() => comingSoon('Collaborator Sharing', 'Invite co-hosts, wedding coordinators, or committee members with role-based permissions.')}
+                  onClick={() => comingSoon('Collaborator Sharing', 'Share event blueprints and schedules with co-hosts and committee members.')}
                   title="Collaborator Sharing"
                   className="p-2 text-slate-600 hover:text-plum-800 hover:bg-ivory-200/80 rounded-xl transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500"
                 >
